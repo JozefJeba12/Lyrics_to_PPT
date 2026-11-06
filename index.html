@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lyrics → PPT Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Sans+Tamil:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--gold:#7f93d9;--line:rgba(255,255,255,.14)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;color:#eee;font-family:Inter,'Noto Sans Tamil',sans-serif;background:radial-gradient(900px 600px at 20% 0%,rgba(70,90,170,.35),transparent 65%),#080b16;background-attachment:fixed}
+html{background:#080b16}
+.app{display:grid;grid-template-columns:360px 1fr;gap:16px;padding:16px;min-height:100vh}
+.glass{background:linear-gradient(160deg,rgba(130,150,230,.18) 0%,rgba(130,150,230,.06) 40%,rgba(130,150,230,.03) 55%,rgba(130,150,230,.1) 100%);border:1px solid var(--line);border-radius:18px;box-shadow:0 14px 50px rgba(0,0,0,.6),inset 0 2px 0 rgba(255,255,255,.22),inset 0 -2px 10px rgba(130,150,230,.08);backdrop-filter:blur(16px)}
+.left{padding:18px;display:flex;flex-direction:column;gap:12px}
+h1{font-size:19px;margin:0;letter-spacing:.5px}
+h1 span{color:#9fb2f0}
+label{font-size:12px;color:#aab4d8;text-transform:uppercase;letter-spacing:1px}
+textarea,input[type=date]{width:100%;background:rgba(8,11,25,.6);color:#fff;border:1px solid var(--line);border-radius:12px;padding:10px;font:inherit;font-size:14px;color-scheme:dark}
+textarea{flex:1;min-height:300px;resize:vertical;line-height:1.5}
+.hint{font-size:12px;color:#9aa5cc;line-height:1.5}
+button{position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.2);color:#fff;font:inherit;font-weight:600;font-size:14px;padding:11px 14px;border-radius:12px;cursor:pointer;background:linear-gradient(180deg,rgba(255,255,255,.26) 0%,rgba(255,255,255,.05) 49%,rgba(0,0,0,.15) 50%,rgba(255,255,255,.04) 100%),#3a4c8f;box-shadow:0 6px 18px rgba(20,30,80,.5),inset 0 1px 0 rgba(255,255,255,.35)}
+button:hover{filter:brightness(1.25)}
+button.gold{color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.4);background:linear-gradient(180deg,rgba(255,255,255,.3) 0%,rgba(255,255,255,.06) 49%,rgba(0,0,0,.15) 50%,rgba(255,255,255,.05) 100%),#4a62b3;box-shadow:0 6px 18px rgba(30,45,110,.55),inset 0 1px 0 rgba(255,255,255,.4)}
+.row{display:flex;gap:8px}.row button{flex:1}
+.right{display:flex;flex-direction:column;padding:14px;gap:12px;min-width:0}
+.bar{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.bar small{color:#9aa5cc}
+.work{display:grid;grid-template-columns:190px 1fr;gap:14px;flex:1;min-height:0}
+.strip{display:flex;flex-direction:column;gap:10px;overflow-y:auto;max-height:calc(100vh - 120px);padding-right:6px}
+.thumb{display:flex;gap:6px;align-items:flex-start;cursor:pointer}
+.thumb i{font-style:normal;font-size:11px;color:#aab4d8;width:16px;padding-top:4px}
+.thumb .slide{flex:1;border:2px solid transparent}
+.thumb.sel .slide{border-color:var(--gold);box-shadow:0 0 14px rgba(127,147,217,.6)}
+.stage{display:flex;flex-direction:column;gap:10px;align-items:center;justify-content:flex-start}
+.slide{container-type:inline-size;aspect-ratio:16/9;width:100%;background:#000;border-radius:6px;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;position:relative;box-shadow:0 12px 40px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.15),0 0 30px rgba(80,100,190,.3)}
+.slide::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.07),transparent 35%);pointer-events:none}
+.slide .t{white-space:pre-wrap;font-family:'Noto Sans Tamil',Inter,sans-serif;color:#fff;font-size:4.4cqw;line-height:1.35;padding:4cqw;outline:none;width:100%;position:relative;z-index:1}
+.slide.title .t{font-weight:800;font-size:9cqw;letter-spacing:.3cqw}
+.slide.title .t .d{display:block;font-size:4.2cqw;color:var(--gold);font-weight:400;letter-spacing:.2cqw}
+.main{max-width:900px;width:100%}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:2cqw;width:100%;height:100%;padding:2.6cqw 2cqw;align-items:start;position:relative;z-index:1}
+.cols .t{font-size:var(--fs,3.2cqw);padding:1cqw;line-height:1.4;font-weight:700;text-align:left}
+.slide.lyric .t{font-weight:700;text-align:left}
+.slide.lyric{align-items:flex-start}
+.cols .t:first-child{border-right:1px solid rgba(255,255,255,.2)}
+.main .t:focus{background:rgba(255,255,255,.05)}
+.empty{color:#9aa5cc;text-align:center;margin-top:80px}
+.toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:#1a2243;border:1px solid var(--gold);padding:10px 16px;border-radius:12px;font-size:13px;display:none;z-index:9}
+@media(max-width:900px){.app{grid-template-columns:1fr}.work{grid-template-columns:1fr}.strip{flex-direction:row;max-height:none;overflow-x:auto;overflow-y:hidden}.thumb{min-width:150px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <section class="glass left">
+    <h1>Lyrics → <span>PPT</span> Studio</h1>
+    <label>Sunday date (file name-ku mattum)</label>
+    <input type="date" id="date">
+    <label>Lyrics</label>
+    <textarea id="lyrics" placeholder="Song 1 lyrics paste pannunga...&#10;&#10;(stanza-ku naduvula oru blank line)&#10;&#10;-&#10;&#10;Song 2 lyrics..."></textarea>
+    <div class="hint">Oru song mudinja udane thani line-la <b>-</b> type pannunga. Full song-ah appadiye paste pannunga — auto-ah pirichi, oru slide-la left & right 2 column-ah varum (oru song = oru slide). Stanza-ku naduvula blank line vidunga — appo stanza-ah udaikkama, ellam slide-kulla fit aagura maathiri pirikkum.</div>
+    <div class="row"><button class="gold" id="gen">Generate Slides</button></div>
+    <div class="row"><button id="dl">⬇ Download PPT</button></div>
+  </section>
+
+  <section class="glass right">
+    <div class="bar"><b>Preview</b><small id="count">0 slides</small>
+      <span class="row" style="flex:none"><button id="addb">+ Slide</button><button id="delb">Delete</button></span></div>
+    <div class="work">
+      <div class="strip" id="strip"></div>
+      <div class="stage"><div id="main" class="main"></div><small style="color:#9aa5cc">Slide-ah click panni direct-ah text edit pannalam.</small></div>
+    </div>
+  </section>
+</div>
+<div class="toast" id="toast"></div>
+
+
+<script>
+const $=id=>document.getElementById(id);
+let slides=[],sel=0;
+const MON=['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
+const pad=n=>String(n).padStart(2,'0');
+function nextSunday(){const d=new Date();d.setDate(d.getDate()+(7-d.getDay())%7);return d}
+function dateStr(){const[y,m,d]=$('date').value.split('-').map(Number);return {line1:'SUNDAY',line2:pad(d)+' '+MON[m-1]+' '+y,file:'Sunday-'+pad(d)+'-'+pad(m)+'-'+y}}
+const sd=nextSunday();$('date').value=sd.getFullYear()+'-'+pad(sd.getMonth()+1)+'-'+pad(sd.getDate());
+
+function titleText(){const s=dateStr();return s.line1+'\n'+s.line2}
+function layout(parts){
+  let units=parts,join='\n\n',gap=1;
+  if(parts.length===1){units=parts[0].split('\n');join='\n';gap=0}
+  let res=null,fb=null;
+  for(let fs=32;fs>=10;fs--){
+    const cpl=Math.floor(4.7*72/(fs*0.62)),cap=5.1/(fs*1.33/72);
+    const hs=units.map(u=>u.split('\n').reduce((a,l)=>a+Math.max(1,Math.ceil(l.length/cpl)),0));
+    let used=0,k=0;
+    while(k<units.length){const add=hs[k]+(k?gap:0);if(used+add>cap&&k>0)break;used+=add;k++}
+    let ru=0;for(let j=k;j<units.length;j++)ru+=hs[j]+(j>k?gap:0);
+    res={left:units.slice(0,k).join(join),right:units.slice(k).join(join),fs};
+    if(used<=cap&&ru<=cap){if(!fb)fb=res;if(ru<=0.3*cap&&fs>=12)return res}
+  }
+  return fb||res;
+}
+function parse(){
+  const raw=$('lyrics').value.replace(/\r/g,'');
+  const songs=raw.split(/\n[ \t]*-+[ \t]*(?:\n|$)/).map(s=>s.trim()).filter(Boolean);
+  const out=[];
+  songs.forEach(song=>{
+    let parts=song.split(/\n\s*\n/).map(p=>p.trim()).filter(Boolean);
+    
+    const L=parts.map(p=>p.split('\n').reduce((a,l)=>a+Math.max(1,Math.ceil(l.length/38)),0)+1),T=L.reduce((a,b)=>a+b,0);
+    let best=1,bd=1e9,acc=0;for(let k=1;k<parts.length;k++){acc+=L[k-1];const d=Math.abs(acc-T/2);if(d<bd){bd=d;best=k}}
+    let left,right;
+    if(parts.length>1){left=parts.slice(0,best).join('\n\n');right=parts.slice(best).join('\n\n')}
+    else{const l=parts[0].split('\n'),h=Math.ceil(l.length/2);left=l.slice(0,h).join('\n');right=l.slice(h).join('\n')}
+    {const R=layout(parts);out.push({type:'lyric',left:R.left,right:R.right,two:!!R.right,fs0:R.fs/7.2})}
+  });
+  return out;
+}
+function fsFor(s){return s.fs0||3.6}
+function fitCols(c){let fs=(c._s&&c._s.fs0)||3.6;const ts=[...c.querySelectorAll('.t')];const lim=c.clientHeight*0.95;if(!lim)return;c.style.setProperty('--fs',fs+'cqw');
+  while(fs>1.2&&Math.max(...ts.map(t=>t.scrollHeight))>lim){fs-=0.1;c.style.setProperty('--fs',fs.toFixed(2)+'cqw')}
+  if(c._s)c._s.fs=fs}
+function slideEl(s,editable,i){
+  const d=document.createElement('div');d.className='slide '+s.type;
+  const t=document.createElement('div');t.className='t';
+  if(s.type==='title'){const[a,b]=s.text.split('\n');t.textContent=a||'';if(b){const sp=document.createElement('span');sp.className='d';sp.textContent=b;t.appendChild(sp)}}
+  else if(s.two){
+    const c=document.createElement('div');c.className='cols';c._s=s;c.style.setProperty('--fs',fsFor(s)+'cqw');
+    ['left','right'].forEach(k=>{const x=document.createElement('div');x.className='t';x.textContent=s[k];
+      if(editable){x.contentEditable='true';x.oninput=()=>{s[k]=x.innerText.replace(/\n\n$/,'');fitCols(c);renderThumb(i)}}
+      c.appendChild(x)});
+    d.appendChild(c);return d;
+  }
+  else t.textContent=s.left;
+  const key=s.type==='title'?'text':'left';
+  if(editable){t.contentEditable='true';t.oninput=()=>{s[key]=t.innerText.replace(/\n\n$/,'');renderThumb(i)}}
+  d.appendChild(t);return d;
+}
+function renderThumb(i){const h=$('strip').children[i];if(!h)return;const old=h.querySelector('.slide');h.replaceChild(slideEl(slides[i],false),old);const c2=h.querySelector('.cols');if(c2)fitCols(c2)}
+function render(){
+  if(sel>=slides.length)sel=Math.max(0,slides.length-1);
+  $('count').textContent=slides.length+' slides';
+  const st=$('strip');st.innerHTML='';
+  slides.forEach((s,i)=>{const w=document.createElement('div');w.className='thumb'+(i===sel?' sel':'');
+    const n=document.createElement('i');n.textContent=i+1;w.appendChild(n);w.appendChild(slideEl(s,false));
+    w.onclick=()=>{sel=i;render()};st.appendChild(w)});
+  const m=$('main');m.innerHTML='';
+  if(!slides.length){m.innerHTML='<div class="empty">Lyrics paste panni “Generate Slides” click pannunga</div>';return}
+  m.appendChild(slideEl(slides[sel],true,sel));document.querySelectorAll('.cols').forEach(fitCols);
+}
+function toast(t){const e=$('toast');e.textContent=t;e.style.display='block';setTimeout(()=>e.style.display='none',7000)}
+
+$('gen').onclick=()=>{slides=parse();sel=0;render()};
+$('date').onchange=()=>{if(slides[0]&&slides[0].type==='title'){slides[0].text=titleText();render()}};
+$('addb').onclick=()=>{slides.splice(sel+1,0,{type:'lyric',left:'New slide',right:'',two:false});sel++;render()};
+$('delb').onclick=()=>{if(slides.length>1){slides.splice(sel,1);render()}};
+
+function estFs(s){for(let fs=26;fs>=8;fs--){const cpl=Math.floor(4.7*72/(fs*0.62));const h=[s.left,s.right].map(t=>t.split('\n').reduce((a,l)=>a+Math.max(1,Math.ceil(l.length/cpl)),0)*fs*1.33/72);if(Math.max(...h)<=5.1)return fs}return 8}
+$('dl').onclick=async()=>{
+  if(!slides.length){toast('First slides generate pannunga');return}
+  try{
+    if(typeof PptxGenJS==='undefined'){toast('PPT library load aagala, page-ah reload pannunga');return}
+    const dls=await (window.claude?claude.use('downloads'):null);
+    const p=new PptxGenJS();p.layout='LAYOUT_16x9';
+    slides.forEach(s=>{
+      const sl=p.addSlide();sl.background={color:'000000'};
+      if(s.type==='title'){
+        const[a,b]=s.text.split('\n');
+        sl.addText(a||'',{x:0.5,y:1.5,w:9,h:1.4,align:'center',valign:'middle',fontSize:66,bold:true,color:'FFFFFF',fontFace:'Nirmala UI'});
+        if(b)sl.addText(b,{x:0.5,y:2.9,w:9,h:0.8,align:'center',valign:'top',fontSize:28,color:'F5C76A',fontFace:'Nirmala UI'});
+      }else{
+        if(s.two){
+          const n=Math.max(s.left.split('\n').length,s.right.split('\n').length);
+          const fs=Math.max(8,Math.min(estFs(s),s.fs?Math.floor(s.fs*7.2):99));
+          const o={y:0.4,w:4.4,h:4.8,align:'center',valign:'top',fontSize:fs,color:'FFFFFF',fontFace:'Nirmala UI',fit:'shrink',lineSpacingMultiple:1.15};
+          sl.addText(s.left,{...o,x:0.3});sl.addText(s.right,{...o,x:5.3});
+          
+        }else{
+          const n=s.left.split('\n').length;
+          sl.addText(s.left,{x:0.5,y:0.4,w:9,h:4.8,align:'center',valign:'middle',fontSize:n<=4?40:n<=6?34:28,color:'FFFFFF',fontFace:'Nirmala UI',fit:'shrink',lineSpacingMultiple:1.15});
+        }
+      }
+    });
+    const buf=await p.write({outputType:'arraybuffer',compression:true});const blob=new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.presentationml.presentation'});const kb=Math.max(1,Math.round(blob.size/1024));
+    
+    if(!dls){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=dateStr().file+'.pptx';document.body.appendChild(a);a.click();a.remove();toast('Download start aachu ('+kb+' KB)');return}
+    await dls.save({filename:dateStr().file+'.pptx',data:blob});toast('Saved ✓ ('+kb+' KB)');
+  }catch(e){if(!e||e.code!=='declined')toast('Download aagala: '+((e&&e.message)||e))}
+};
+render();
+</script>
+<script>
+/* Self-contained PPTX writer (no external library) */
+const CRC=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return b=>{let c=~0;for(let i=0;i<b.length;i++)c=t[(c^b[i])&255]^(c>>>8);return ~c>>>0}})();
+async function deflateRaw(u8){if(!window.CompressionStream)return null;const cs=new CompressionStream('deflate-raw');const w=cs.writable.getWriter();w.write(u8);w.close();return new Uint8Array(await new Response(cs.readable).arrayBuffer())}
+async function zipFiles(files){
+  const enc=new TextEncoder(),parts=[],cen=[];let off=0;
+  for(const[n,s]of files){
+    const nm=enc.encode(n),raw=enc.encode(s),crc=CRC(raw);let d=null;
+    try{d=await deflateRaw(raw)}catch(e){d=null}
+    const m=d&&d.length<raw.length?8:0;if(!m)d=raw;
+    const h=new DataView(new ArrayBuffer(30));h.setUint32(0,0x04034b50,true);h.setUint16(4,20,true);h.setUint16(6,0x0800,true);h.setUint16(8,m,true);h.setUint16(12,0x21,true);h.setUint32(14,crc,true);h.setUint32(18,d.length,true);h.setUint32(22,raw.length,true);h.setUint16(26,nm.length,true);
+    parts.push(new Uint8Array(h.buffer),nm,d);
+    const c=new DataView(new ArrayBuffer(46));c.setUint32(0,0x02014b50,true);c.setUint16(4,20,true);c.setUint16(6,20,true);c.setUint16(8,0x0800,true);c.setUint16(10,m,true);c.setUint16(14,0x21,true);c.setUint32(16,crc,true);c.setUint32(20,d.length,true);c.setUint32(24,raw.length,true);c.setUint16(28,nm.length,true);c.setUint32(42,off,true);
+    cen.push(new Uint8Array(c.buffer),nm);off+=30+nm.length+d.length;
+  }
+  const cs=cen.reduce((a,b)=>a+b.length,0);const e=new DataView(new ArrayBuffer(22));e.setUint32(0,0x06054b50,true);e.setUint16(8,files.length,true);e.setUint16(10,files.length,true);e.setUint32(12,cs,true);e.setUint32(16,off,true);
+  return new Blob([...parts,...cen,new Uint8Array(e.buffer)],{type:'application/vnd.openxmlformats-officedocument.presentationml.presentation'});
+}
+const NS='xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main"';
+const XH='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
+const RT='http://schemas.openxmlformats.org/officeDocument/2006/relationships/';
+const CT='application/vnd.openxmlformats-officedocument.';
+const EMU=v=>Math.round(v*914400);
+const esc=t=>t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const GRP='<p:nvGrpSpPr><p:cNvPr id="1" name=""/><p:cNvGrpSpPr/><p:nvPr/></p:nvGrpSpPr><p:grpSpPr/>';
+let sid=1;
+function paras(text,fs,color,bold,algn){const sz=Math.round(fs*100);return text.split('\n').map(l=>l.trim()===''?'<a:p><a:endParaRPr lang="en-US" sz="'+sz+'"/></a:p>':'<a:p><a:pPr algn="'+algn+'"><a:lnSpc><a:spcPct val="110000"/></a:lnSpc></a:pPr><a:r><a:rPr lang="ta-IN" sz="'+sz+'" b="'+(bold?1:0)+'"><a:solidFill><a:srgbClr val="'+color+'"/></a:solidFill><a:latin typeface="Nirmala UI"/><a:cs typeface="Nirmala UI"/></a:rPr><a:t>'+esc(l)+'</a:t></a:r></a:p>').join('')}
+function box(x,y,w,h,text,fs,color,bold,anchor){sid++;return '<p:sp><p:nvSpPr><p:cNvPr id="'+sid+'" name="Text '+sid+'"/><p:cNvSpPr txBox="1"/><p:nvPr/></p:nvSpPr><p:spPr><a:xfrm><a:off x="'+EMU(x)+'" y="'+EMU(y)+'"/><a:ext cx="'+EMU(w)+'" cy="'+EMU(h)+'"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom><a:noFill/></p:spPr><p:txBody><a:bodyPr wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" anchor="'+anchor+'"><a:normAutofit/></a:bodyPr><a:lstStyle/>'+paras(text,fs,color,bold,bold===2?'l':'ctr')+'</p:txBody></p:sp>'}
+function estOne(s){for(let fs=40;fs>=10;fs--){const cpl=Math.floor(9.4*72/(fs*0.62));const h=s.left.split('\n').reduce((a,l)=>a+Math.max(1,Math.ceil(l.length/cpl)),0)*fs*1.33/72;if(h<=5.0)return fs}return 10}
+const BG='<p:bg><p:bgPr><a:solidFill><a:srgbClr val="000000"/></a:solidFill><a:effectLst/></p:bgPr></p:bg>';
+function slideXml(s){
+  sid=1;let sh='';
+  if(s.type==='title'){const[a,b]=s.text.split('\n');sh+=box(0.5,1.5,9,1.4,a||'',66,'FFFFFF',1,'ctr');if(b)sh+=box(0.5,2.95,9,0.8,b,28,'F5C76A',0,'t')}
+  else if(s.two){const fs=Math.max(8,Math.min(estFs(s),s.fs?Math.floor(s.fs*7.2):99));sh+=box(0.2,0.26,4.7,5.1,s.left,fs,'FFFFFF',2,'t')+box(5.1,0.26,4.7,5.1,s.right,fs,'FFFFFF',2,'t')}
+  else sh+=box(0.2,0.26,9.6,5.1,s.left,estOne(s),'FFFFFF',2,'t');
+  return XH+'<p:sld '+NS+'><p:cSld>'+BG+'<p:spTree>'+GRP+sh+'</p:spTree></p:cSld><p:clrMapOvr><a:masterClrMapping/></p:clrMapOvr></p:sld>';
+}
+function themeXml(){
+  const f='<a:solidFill><a:schemeClr val="phClr"/></a:solidFill>',ln='<a:ln w="6350">'+f+'</a:ln>',ef='<a:effectStyle><a:effectLst/></a:effectStyle>';
+  const cols=['dk1:000000','lt1:FFFFFF','dk2:1F1F1F','lt2:EEEEEE','accent1:F5C76A','accent2:4472C4','accent3:A5A5A5','accent4:FFC000','accent5:5B9BD5','accent6:70AD47','hlink:0563C1','folHlink:954F72'].map(x=>{const[n,v]=x.split(':');return '<a:'+n+'><a:srgbClr val="'+v+'"/></a:'+n+'>'}).join('');
+  const ft='<a:latin typeface="Nirmala UI"/><a:ea typeface=""/><a:cs typeface=""/>';
+  return XH+'<a:theme xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" name="Lyrics"><a:themeElements><a:clrScheme name="Lyrics">'+cols+'</a:clrScheme><a:fontScheme name="Lyrics"><a:majorFont>'+ft+'</a:majorFont><a:minorFont>'+ft+'</a:minorFont></a:fontScheme><a:fmtScheme name="Lyrics"><a:fillStyleLst>'+f+f+f+'</a:fillStyleLst><a:lnStyleLst>'+ln+ln+ln+'</a:lnStyleLst><a:effectStyleLst>'+ef+ef+ef+'</a:effectStyleLst><a:bgFillStyleLst>'+f+f+f+'</a:bgFillStyleLst></a:fmtScheme></a:themeElements></a:theme>';
+}
+const rels=a=>XH+'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'+a.map(([id,t,tg])=>'<Relationship Id="'+id+'" Type="'+RT+t+'" Target="'+tg+'"/>').join('')+'</Relationships>';
+async function buildPptx(){
+  const n=slides.length,idx=[...Array(n).keys()];
+  const files=[
+    ['[Content_Types].xml',XH+'<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/ppt/presentation.xml" ContentType="'+CT+'presentationml.presentation.main+xml"/><Override PartName="/ppt/slideMasters/slideMaster1.xml" ContentType="'+CT+'presentationml.slideMaster+xml"/><Override PartName="/ppt/slideLayouts/slideLayout1.xml" ContentType="'+CT+'presentationml.slideLayout+xml"/><Override PartName="/ppt/theme/theme1.xml" ContentType="'+CT+'theme+xml"/>'+idx.map(i=>'<Override PartName="/ppt/slides/slide'+(i+1)+'.xml" ContentType="'+CT+'presentationml.slide+xml"/>').join('')+'</Types>'],
+    ['_rels/.rels',rels([['rId1','officeDocument','ppt/presentation.xml']])],
+    ['ppt/presentation.xml',XH+'<p:presentation '+NS+'><p:sldMasterIdLst><p:sldMasterId id="2147483648" r:id="rId1"/></p:sldMasterIdLst><p:sldIdLst>'+idx.map(i=>'<p:sldId id="'+(256+i)+'" r:id="rId'+(i+3)+'"/>').join('')+'</p:sldIdLst><p:sldSz cx="9144000" cy="5143500"/><p:notesSz cx="6858000" cy="9144000"/></p:presentation>'],
+    ['ppt/_rels/presentation.xml.rels',rels([['rId1','slideMaster','slideMasters/slideMaster1.xml'],['rId2','theme','theme/theme1.xml'],...idx.map(i=>['rId'+(i+3),'slide','slides/slide'+(i+1)+'.xml'])])],
+    ['ppt/theme/theme1.xml',themeXml()],
+    ['ppt/slideMasters/slideMaster1.xml',XH+'<p:sldMaster '+NS+'><p:cSld>'+BG+'<p:spTree>'+GRP+'</p:spTree></p:cSld><p:clrMap bg1="lt1" tx1="dk1" bg2="lt2" tx2="dk2" accent1="accent1" accent2="accent2" accent3="accent3" accent4="accent4" accent5="accent5" accent6="accent6" hlink="hlink" folHlink="folHlink"/><p:sldLayoutIdLst><p:sldLayoutId id="2147483649" r:id="rId1"/></p:sldLayoutIdLst></p:sldMaster>'],
+    ['ppt/slideMasters/_rels/slideMaster1.xml.rels',rels([['rId1','slideLayout','../slideLayouts/slideLayout1.xml'],['rId2','theme','../theme/theme1.xml']])],
+    ['ppt/slideLayouts/slideLayout1.xml',XH+'<p:sldLayout '+NS+' type="blank" preserve="1"><p:cSld name="Blank"><p:spTree>'+GRP+'</p:spTree></p:cSld><p:clrMapOvr><a:masterClrMapping/></p:clrMapOvr></p:sldLayout>'],
+    ['ppt/slideLayouts/_rels/slideLayout1.xml.rels',rels([['rId1','slideMaster','../slideMasters/slideMaster1.xml']])]
+  ];
+  idx.forEach(i=>{files.push(['ppt/slides/slide'+(i+1)+'.xml',slideXml(slides[i])]);files.push(['ppt/slides/_rels/slide'+(i+1)+'.xml.rels',rels([['rId1','slideLayout','../slideLayouts/slideLayout1.xml']])])});
+  return zipFiles(files);
+}
+$('dl').onclick=async()=>{
+  if(!slides.length){toast('First slides generate pannunga');return}
+  try{
+    const dls=await(window.claude?claude.use('downloads'):null);
+    const blob=await buildPptx();const kb=Math.max(1,Math.round(blob.size/1024));
+    const name=dateStr().file+'.pptx';
+    if(!dls){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();toast('Download start aachu ('+kb+' KB)');return}
+    await dls.save({filename:name,data:blob});toast('Saved ✓ ('+kb+' KB)');
+  }catch(e){if(!e||e.code!=='declined')toast('Download aagala: '+((e&&e.message)||e))}
+};
+</script>
+</body>
+</html>
